@@ -600,6 +600,24 @@
             background-color: #3a0a0a;
         }
         
+        .skip-login-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .skip-login-btn:hover {
+            background-color: #f5f5f5;
+        }
+        
         footer {
             background-color: var(--secondary-color);
             color: var(--primary-color);
@@ -822,6 +840,7 @@
                     <input type="text" id="customerAddress" required>
                 </div>
                 <button type="submit" class="login-submit">حفظ البيانات</button>
+                <button type="button" class="skip-login-btn" id="skipLoginBtn">تخطي التسجيل الآن</button>
             </form>
         </div>
     </div>
@@ -997,6 +1016,7 @@
         // متغيرات تسجيل الدخول
         const loginModal = document.getElementById('loginModal');
         const loginForm = document.getElementById('loginForm');
+        const skipLoginBtn = document.getElementById('skipLoginBtn');
         let customerInfo = JSON.parse(localStorage.getItem('customerInfo')) || null;
 
         // مؤثرات صوتية
@@ -1024,7 +1044,7 @@
             updateCart();
             setupEventListeners();
             
-            // إذا لم يكن العميل مسجلًا، نعرض نموذج التسجيل
+            // إذا لم يكن العميل مسجلًا، نعرض نموذج التسجيل (لكنها اختيارية الآن)
             if (!customerInfo) {
                 setTimeout(() => {
                     loginModal.classList.add('active');
@@ -1202,6 +1222,11 @@
                     alert('الرجاء ملء جميع الحقول');
                 }
             });
+            
+            // تخطي تسجيل الدخول
+            skipLoginBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+            });
         }
 
         // تصفية المنتجات
@@ -1372,9 +1397,10 @@
                 return;
             }
             
+            // إذا لم يكن العميل مسجلًا، نطلب منه التسجيل أولاً
             if (!customerInfo) {
                 errorSound.play();
-                alert('الرجاء تسجيل بياناتك الشخصية أولاً');
+                alert('الرجاء تسجيل بياناتك الشخصية أولاً لإتمام الطلب');
                 loginModal.classList.add('active');
                 return;
             }
